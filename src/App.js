@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './index.css';
+import NavBar from './Navbar/Navbar';
+import TypingTest from './TypingTestApp/TypingTest';
+import LeaderBoard from './LeaderBoard/LeaderBoard';
+import ResultsMenu from './ResultsMenu/ResultsMenu';
+import 'bootstrap/dist/css/bootstrap.css';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <React.StrictMode>
+        <NavBar />
+        <Routes>
+          <Route path="/typing" element={<TypingTest />} />
+          <Route path="/leaderboard" element={<LeaderBoard />} />
+          <Route path="/results" element={<ResultsMenu />} />
+          <Route path="*" element={<TypingTest />} />
+        </Routes>
+      </React.StrictMode>
+    </Router>
   );
-}
+};
 
 export default App;
