@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 import NavBar from './Navbar/Navbar';
@@ -8,8 +8,11 @@ import LeaderBoard from './LeaderBoard/LeaderBoard';
 import ResultsMenu from './ResultsMenu/ResultsMenu';
 import 'bootstrap/dist/css/bootstrap.css';
 
+
 const App = () => {
+  
   return (
+
     <Router>
       <React.StrictMode>
         <NavBar />
@@ -21,6 +24,7 @@ const App = () => {
         </Routes>
       </React.StrictMode>
     </Router>
+
   );
 };
 
