@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate from react
 function NavBar() {
   const [user, setUser] = useState([]);
   const [profile, setProfile] = useState([]);
+  const [storedData, setStoredData] = useState(null); // State to store the logged-in user data
   const navigate = useNavigate(); // Access the navigate function
 
   const login = useGoogleLogin({
@@ -17,12 +18,6 @@ function NavBar() {
     },
     onError: (error) => console.log('Login Failed:', error)
   });
-  let data = { name: "g", age: 25 };
-  const dataString = JSON.stringify(data);
-localStorage.setItem("myData", dataString);
-  useEffect(() => {
-    localStorage.setItem("myData", dataString);
-  }, []);
 
   useEffect(() => {
     if (user) {
@@ -35,14 +30,33 @@ localStorage.setItem("myData", dataString);
         })
         .then((res) => {
           setProfile(res.data);
+          // Update storedData when a new login occurs
+          const data = { name: res.data.given_name, age: 25 };
+          setStoredData(data);
         })
         .catch((err) => console.log(err));
     }
   }, [user]);
 
+  useEffect(() => {
+    if (profile && profile.name) {
+      const data = { name: profile.given_name, age: 25 };
+      const dataString = JSON.stringify(data);
+      localStorage.setItem("myData", dataString);
+      setStoredData(data);
+    }
+  }, [profile]);
+
+  useEffect(() => {
+    const storedDataString = localStorage.getItem("myData");
+    const parsedData = JSON.parse(storedDataString);
+    setStoredData(parsedData);
+  }, []);
+
   const logOut = () => {
     googleLogout();
     setProfile(null);
+    setStoredData(null); // Reset storedData on logout
   };
 
   const navigateToAnotherComponent = (codeResponse) => {
@@ -51,6 +65,7 @@ localStorage.setItem("myData", dataString);
   };
 
   return (
+    
     <div>
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <a className="navbar-brand" href="typing">
@@ -69,7 +84,7 @@ localStorage.setItem("myData", dataString);
         </button>
 
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav mr-auto">
+        <ul className="navbar-nav mr-auto">
             <li className="nav-item active">
               <a className="nav-link" href="/typing">
                 New Test <span className="sr-only">(current)</span>
@@ -81,31 +96,24 @@ localStorage.setItem("myData", dataString);
               </a>
             </li>
             <li className="nav-item dropdown">
-              <div>
-                {profile ? (
-                  <div>
-                    <p>Name: {profile.name}</p>
-                    <button onClick={logOut}>Log out</button>
-                  </div>
-                ) : (
-                  <button onClick={() => login()}>Sign in with Google 🚀 </button>
-                )}
-              </div>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+  {profile ? (
+    <div style={{ display: 'flex', alignItems: 'center' }}>
+      <p style={{ marginRight: '10px', color: 'black' }}>{storedData ? storedData.name : ""}</p>
+      <button onClick={logOut}>Log out</button>
+    </div>
+  ) : (
+    <button onClick={() => login()}>Sign in with Google 🚀</button>
+  )}
+</div>
             </li>
           </ul>
           <form className="form-inline my-2 my-lg-0"></form>
         </div>
-        <div
-          className="g_id_signin"
-          data-type="standard"
-          data-shape="rectangular"
-          data-theme="outline"
-          data-text="signin_with"
-          data-size="large"
-          data-logo_alignment="left"
-        ></div>
+      
       </nav>
     </div>
+    
   );
 }
 
