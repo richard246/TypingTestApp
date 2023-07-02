@@ -16,9 +16,9 @@ function LeaderBoard() {
 
       snapshot.forEach((doc) => {
         const entry = doc.data();
-        entry.id = doc.id; // Add the document ID to the entry data
+        entry.id = doc.id; 
 
-        if (!existingEntries.has(entry.id)) { // Check the entry id instead of name-wpm
+        if (!existingEntries.has(entry.id)) { 
           leaderboardEntries.push(entry);
           existingEntries.add(entry.id);
         }
@@ -45,7 +45,7 @@ function LeaderBoard() {
         border: '1px solid #dee2e6',
         borderRadius: '15px',
         padding: '20px',
-        width: '60%', // reduced width to 60% of the container width
+        width: '60%',
         height: '80vh',
         fontFamily: 'Arial, sans-serif',
         overflowY: 'auto',
@@ -53,7 +53,18 @@ function LeaderBoard() {
         flexDirection: 'column',
         justifyContent: 'center',
       }}>
-        <h3 style={{ color: '#343a40' }}>Leaderboard</h3>
+        <h3 style={{ 
+          color: '#343a40', 
+          fontSize: '2em',
+          paddingBottom: '10px', 
+        }}>Leaderboard</h3>
+        <hr style={{
+          border: '0',
+          height: '1px',
+          backgroundImage: 'linear-gradient(to right, rgba(0, 0, 0, 0), rgba(66, 66, 66, 0.75), rgba(0, 0, 0, 0))',
+          width: '100%',
+          margin: '20px 0', 
+        }}/>
         <ul style={{ listStyleType: 'none', padding: '0' }}>
           {leaderboardData.map((entry, index) => (
             <li key={entry.id} style={{
