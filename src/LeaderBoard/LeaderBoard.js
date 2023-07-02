@@ -38,7 +38,6 @@ function LeaderBoard() {
       height: '100vh',
       margin: '0',
       padding: '0',
-      
     }}>
       <div className="card text-center" style={{
         backgroundImage: 'none',
@@ -46,8 +45,13 @@ function LeaderBoard() {
         border: '1px solid #dee2e6',
         borderRadius: '15px',
         padding: '20px',
-        width: '300px',
-        fontFamily: 'Arial, sans-serif'
+        width: '60%', // reduced width to 60% of the container width
+        height: '80vh',
+        fontFamily: 'Arial, sans-serif',
+        overflowY: 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}>
         <h3 style={{ color: '#343a40' }}>Leaderboard</h3>
         <ul style={{ listStyleType: 'none', padding: '0' }}>
@@ -58,6 +62,7 @@ function LeaderBoard() {
               color: index === 0 ? '#ffffff' : '#495057',
               fontWeight: index === 0 ? 'bold' : 'normal',
               borderRadius: '10px',
+              border: index === 0 ? '3px solid #343a40' : 'none',
             }}>
               {entry.name}: {entry.wpm} WPM
             </li>

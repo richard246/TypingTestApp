@@ -67,53 +67,44 @@ function NavBar() {
   return (
     
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light d-flex justify-content-between" 
+         style={{ padding: '0 20px' }}> {/* Add padding to the sides */}
+      <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <a className="navbar-brand" href="typing">
           Typing Test
         </a>
-        <button
-          className="navbar-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#navbarSupportedContent"
-          aria-controls="navbarSupportedContent"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
         <ul className="navbar-nav mr-auto">
-            <li className="nav-item active">
-              <a className="nav-link" href="/typing">
-                New Test <span className="sr-only">(current)</span>
-              </a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/leaderboard">
-                Leaderboard
-              </a>
-            </li>
-            <li className="nav-item dropdown">
-            <div style={{ display: 'flex', alignItems: 'center' }}>
+          <li className="nav-item active">
+            <a className="nav-link" href="/typing">
+              New Test <span className="sr-only"></span>
+            </a>
+          </li>
+          <li className="nav-item">
+            <a className="nav-link" href="/leaderboard">
+              Leaderboard
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div style={{ display: 'flex', alignItems: 'center' }}>
   {profile ? (
     <div style={{ display: 'flex', alignItems: 'center' }}>
-      <p style={{ marginRight: '10px', color: 'black' }}>{storedData ? storedData.name : ""}</p>
-      <button onClick={logOut}>Log out</button>
+      {/* Style storedData.name */}
+      <p style={{ marginRight: '10px', color: '#4285F4', fontSize: '1.5em', fontWeight: 'bold' }}>{storedData ? storedData.name : ""}</p> 
+      {/* Style the Log out button */}
+      <button onClick={logOut} style={{ backgroundColor: '#4285F4', color: '#ffffff', borderRadius: '2px', border: 'none', padding: '8px 16px', cursor: 'pointer', fontSize: '0.8em' }}>Log out</button>
     </div>
   ) : (
-    <button onClick={() => login()}>Sign in with Google 🚀</button>
+    /* Style the Sign in with Google button */
+    <button onClick={() => login()} style={{ backgroundColor: '#4285F4', color: '#ffffff', borderRadius: '2px', border: 'none', padding: '6px 12px', cursor: 'pointer', fontSize: '0.8em' }}>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" alt="Google G Logo" width="16" height="16" style={{ marginRight: '6px' }}/>
+      Sign in with Google
+    </button>
   )}
 </div>
-            </li>
-          </ul>
-          <form className="form-inline my-2 my-lg-0"></form>
-        </div>
-      
-      </nav>
-    </div>
-    
+    </nav>
+  </div>
+
   );
 }
 

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { fetchQuote } from '../qoute-service';
+import {fetchQuote} from '../qoute-service'
 import ResultsMenu from '../ResultsMenu/ResultsMenu';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { app } from '../firebaseConfig';
 function Menu() {
-  const [quote, setQuote] = useState('');
+  const [quote, setQuote] = useState({ quote: '', author: '' });
   const [inputValue, setInputValue] = useState('');
   const [timer, setTimer] = useState(0);
   const [characterCount, setCharacterCount] = useState(0);
@@ -15,12 +15,13 @@ function Menu() {
   const [correctCharsCount, setCorrectCharsCount] = useState(0);
   const navigate = useNavigate();
  
+ 
 
   useEffect(() => {
     const fetchData = async () => {
-      const quote = await fetchQuote();
-      setQuote(quote);
-      setCharacterCount(quote.length);
+      const quoteData = await fetchQuote();
+      setQuote(quoteData);
+      setCharacterCount(quoteData.quote.length);
     };
 
     fetchData();
@@ -34,7 +35,7 @@ function Menu() {
     // Recalculate correctCharsCount every time
     let newCorrectCharsCount = 0;
     for (let i = 0; i < value.length; i++) {
-      if (value[i] === quote[i]) {
+      if (value[i] === quote.quote[i]) { // quote.quote[i] instead of quote[i]
         newCorrectCharsCount++;
       } else {
         break;
@@ -61,7 +62,7 @@ function Menu() {
   };
 
   const checkMatching = (value) => {
-    if (value === quote) {
+    if (value === quote.quote) { // compare with quote.quote
       stopTimer();
       calculateWPM();
       
@@ -80,7 +81,7 @@ function Menu() {
       await saveDataToFirebase(parsedData.name, wpmValue, accuracy); 
     }
   
-    navigate(`/results?wpm=${wpmValue}&accuracy=${accuracy}`);
+    navigate(`/results?wpm=${wpmValue}&accuracy=${accuracy}&quote=${encodeURIComponent(quote.quote)}&author=${encodeURIComponent(quote.author)}`);
   };
   
   const saveDataToFirebase = async (name, wpm, accuracy) => {
@@ -99,7 +100,7 @@ function Menu() {
   };
 
   const renderQuoteWithColors = () => {
-    const arrayQuote = quote.split('');
+    const arrayQuote = quote.quote.split(''); // split quote.quote
     const arrayValue = inputValue.split('');
 
     return arrayQuote.map((character, index) => {
@@ -125,21 +126,41 @@ function Menu() {
       justifyContent: 'center', 
       alignItems: 'center', 
       height: '100vh',
-      
+      backgroundColor: 'transparent', 
+      fontFamily: 'Arial, sans-serif', 
     }}>
-      <div>
-        <div className="timer" id="timer">{timer}</div>
-        <div className="quote-display" id="quoteDisplay">
-          {renderQuoteWithColors()}
-        </div>
-        <input type="text" id="text" placeholder="" autoComplete="off" style={{ backgroundImage: 'none',
-        backgroundColor: 'transparent',
-        flex: 1,
-        border: 0,
-        outline: 'none',
-        }} value={inputValue} onChange={handleInputChange} autoFocus />
-     
+      <div className="timer" id="timer" style={{
+        color: '#424242',
+        fontSize: '2em',
+        marginBottom: '20px',
+      }}>
+        {timer}
       </div>
+      <div className="quote-display" id="quoteDisplay" style={{
+        color: '#424242',
+        fontSize: '1.5em',
+        textAlign: 'center',
+        marginBottom: '30px',
+      }}>
+        {renderQuoteWithColors()}
+      </div>
+      <input 
+        type="text" 
+        id="text" 
+        placeholder="" 
+        autoComplete="off" 
+        style={{ 
+          width: '80%', 
+          padding: '10px',
+          fontSize: '1em',
+          borderRadius: '5px',
+          border: '1px solid #424242',
+          outline: 'none',
+        }} 
+        value={inputValue} 
+        onChange={handleInputChange} 
+        autoFocus 
+      />
     </div>
 
   );
